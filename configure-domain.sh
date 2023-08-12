@@ -2,7 +2,7 @@
 myuser=$(whoami)
 sudo apt-get update
 sudo apt -y install software-properties-common
-sudo curl -sL https://deb.nodesource.com/setup_14.x | sudo bash  -
+sudo curl -sL https://deb.nodesource.com/setup_12.x | sudo bash  -
 sudo apt-get update
 sudo apt-get install -y nginx apache2-utils postgresql redis nodejs zip unzip php7.4 php7.4-fpm php7.4-pgsql php7.4-memcache php7.4-cli php7.4-json php7.4-common php7.4-mysql php7.4-zip php7.4-gd php7.4-mbstring php7.4-curl php7.4-xml php7.4-bcmath
 sudo php composer-setup.php --install-dir=/usr/bin --filename=composer
@@ -72,7 +72,7 @@ sed -i "s#DB_PASSWORD=postgres#DB_PASSWORD=${passdb}#g" .env
 sed -i "s#EXO_ENABLE_CACHING=#EXO_ENABLE_CACHING=oke#g" .env
 sed -i "s#EXO_ENABLE_SOCKET=no#EXO_ENABLE_SOCKET=oke#g" .env
 sed -i "s#MIX_SOCKET_URL=http://localhost:3000#MIX_SOCKET_URL=http://${varsock}#g" .env
-sed -i 's"SOCKET}#SOCKET}"#g' .ev
+sed -i 's#"SOCKET}#SOCKET}"#g' .env
 sed -i "s#3.1.0#3.17.0#g" .env
 composer install
 sudo php artisan key:generate
@@ -95,12 +95,13 @@ cd ../exo-cbt-socket-1/
 cp .env.example .env
 yarn install
 sudo npm install pm2 -g
-pm2 startup
 pm2 start server.js
+pm2 startup
 
 cd ../../
-sudo chown -R www-data.www-data ~/server/
-sudo chmod -R 755 ~/server/
+sudo usermod -a -G www-data ${myuser}
+sudo chown -R ${myuser}.www-data ~/server/
+sudo chmod -R 775 ~/server/
 sudo chmod -R 777 ~/server/exo-cbt-service-1/public/
 
 sudo systemctl restart nginx
