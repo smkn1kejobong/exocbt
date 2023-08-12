@@ -34,8 +34,6 @@ echo ""
 read -p "Masukan Domain [AdminPanel] : " varap
 read -p "Masukan Domain [Client] : " varclient
 read -p "Masukan Domain [Socket] : " varsock
-read -p "Masukan User [.htpasswd] : " htuser
-read -p "Masukan Password [.htpasswd] : " htpass
 read -p "Masukan User DB : " userdb
 read -p "Masukan Pass DB : " passdb
 read -p "Masukan DB : " dbname
