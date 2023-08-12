@@ -3,7 +3,7 @@ myuser=$(whoami)
 
 sudo apt-get update
 sudo apt -y install software-properties-common
-sudo curl -sL https://deb.nodesource.com/setup_14.x | sudo bash  -
+sudo curl -sL https://deb.nodesource.com/setup_12.x | sudo bash  -
 sudo apt-get update
 sudo apt-get install -y nginx apache2-utils postgresql redis nodejs zip unzip php7.4 php7.4-fpm php7.4-pgsql php7.4-memcache php7.4-cli php7.4-json php7.4-common php7.4-mysql php7.4-zip php7.4-gd php7.4-mbstring php7.4-curl php7.4-xml php7.4-bcmath
 sudo php composer-setup.php --install-dir=/usr/bin --filename=composer
@@ -33,8 +33,6 @@ echo "|______/_/\_\___/ \_____|____/  |_|   "
 echo "Script Builder by Github(@shinau21)"
 echo ""
 read -p "Masukan IP : " varip
-read -p "Masukan User [.htpasswd] : " htuser
-read -p "Masukan Password [.htpasswd] : " htpass
 read -p "Masukan User DB : " userdb
 read -p "Masukan Pass DB : " passdb
 read -p "Masukan DB : " dbname
@@ -90,12 +88,13 @@ cd ../exo-cbt-socket-1/
 cp .env.example .env
 yarn install
 sudo npm install pm2 -g
-pm2 startup systemd -u ${whoami} --hp /home/${whoami}
 pm2 start server.js
+pm2 startup systemd -u ${myuser} --hp /home/${myuser}
 
 cd ../../
-sudo chown -R www-data.www-data ~/server/
-sudo chmod -R 755 ~/server/
+sudo usermod -a -G www-data ${myuser}
+sudo chown -R ${myuser}.www-data ~/server/
+sudo chmod -R 775 ~/server/
 sudo chmod -R 777 ~/server/exo-cbt-service-1/public/
 
 sudo systemctl restart nginx
